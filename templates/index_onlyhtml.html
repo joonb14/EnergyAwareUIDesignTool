@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>app</title>
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <script type="text/javascript">
+      $('#file').change(function() {
+        $('#target').submit();
+      });
+  </script>
+</head>
+<body>
+<div id="wrapper">
+	<header>
+		<h1>UI Power Usage Analyzation Tool</h1>
+	</header>
+	<br>
+	<div id="container">
+		<div id="left">
+			<img id="image" src="../uploads/KakaoTalk_20180319_203730514.jpg">
+	      	<form id="target" action="/upload" method="post" enctype="multipart/form-data" >
+	        	<input id="input" type="file" name="image">
+	      	</form>
+		</div>
+		<div id="right">
+			<div id="overall">
+				<h3>Overall - Total Power Usage: 1140mW</h3>
+			</div>
+			<div class="colorusage">
+				<h4>1) 0xFFFFFF</h4>
+				<div class="colorusage_left"">
+					<div class="colorusage_color" style="background-color: #FFFFFF;"></div>
+				</div>
+				<div class="colorusage_right">
+					<p>Power Usage: 500mW</p>
+					<p>Power Usage Ratio: 50%</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
