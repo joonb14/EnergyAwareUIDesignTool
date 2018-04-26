@@ -21,9 +21,6 @@ def index():
 	return render_template('index.html')
 
 @app.route('/upload', methods = ['POST'])
-
-
-
 def upload_file():
 	file = request.files['image']
 	filename = secure_filename(file.filename)
@@ -48,8 +45,8 @@ def upload_file():
 	y_delta = 36
 	counting_pixels = (x_delta*y_delta) # will be 2304 for almost all resolutions
 	all_pixel = im.load()
-	x_offset = x//x_delta
-	y_offset = y//y_delta
+	x_offset = x // x_delta
+	y_offset = y // y_delta
 
 	pixels = []
 	for i in range(x_delta):
@@ -77,15 +74,8 @@ def upload_file():
 	"""
 
 	R, G, B = np.mean(end_pixels, axis=0)
-	#predicted_power = clf.predict([[R/255, G/255, B/255]])[0] + 200
-	predicted_power = 0
-	pixel_cnt = 0
 	clf = joblib.load('model/power_svm.pkl')
-	for i in end_pixels:
-		tmp_power = clf.predict([[i[0]/255, i[1]/255,    i[2]/255]])[0] + 200
-		predicted_power = predicted_power + tmp_power
-		pixel_cnt = pixel_cnt + 1
-	predicted_power = predicted_power / pixel_cnt
+	predicted_power = clf.predict([[R/255, G/255, B/255]])[0] + 200
 	#print(np.mean(median_pixels,axis=0))
 	
 	# pick 3 most used colors
