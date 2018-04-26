@@ -4,11 +4,7 @@
   <meta charset="UTF-8">
   <title>app</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}" />
-  <script type="text/javascript">
-      $('#file').change(function() {
-        $('#target').submit();
-      });
-  </script>
+  <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -17,6 +13,9 @@
   </header>
   <br>
   <div id="container">
+    <div id="options">
+      <p><input type="checkbox" name="chk_info" value="mergeColors"> Merge Similar Colors </p>
+    </div>
     <div id="left">
       {% if filename %}
       <img id="image" src="{{ url_for('send_file', filename=filename) }}">
@@ -24,8 +23,7 @@
       <h1>no image</h1>
       {% endif %}
       <form id="target" action="/upload" method="post" enctype="multipart/form-data" >
-        <p><input id="input" type="file" name="image"></p>
-        <p><input type="submit" value="Upload"></p>
+        <p><input id="input" type="file" name="image" onchange="javascript:this.form.submit();"></p>
       </form>
     </div>
     <div id="right">
