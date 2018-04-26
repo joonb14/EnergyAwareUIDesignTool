@@ -21,9 +21,6 @@ def index():
 	return render_template('index.html')
 
 @app.route('/upload', methods = ['POST'])
-
-
-
 def upload_file():
 	file = request.files['image']
 	filename = secure_filename(file.filename)
@@ -120,6 +117,10 @@ def upload_file():
 	for i in range(0, 10):
 		colorUsage.append([i, most_string[i], most_power[i], most_ratio[i], most_name[i], most_per[i]])
 
+	return render_template('index.html', filename = filename ,Red = round(R, 2), Green = round(G, 2), Blue = round(B, 2), Power = round(predicted_power, 2), colorUsage = colorUsage)
+
+@app.route('/upload_with_option')
+def upload_file_with_option():
 	return render_template('index.html', filename = filename ,Red = round(R, 2), Green = round(G, 2), Blue = round(B, 2), Power = round(predicted_power, 2), colorUsage = colorUsage)
 
 @app.route('/uploads/<filename>')

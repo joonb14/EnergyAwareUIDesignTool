@@ -1,72 +1,13 @@
-body
-{
-background-color: #333333;
-color: #FFFFFF;
-}
-h3, h4
-{
-margin: 0px;
-}
-#wrapper
-{
-text-align: center;
-}
-#left
-{
-float:left;
-margin-left: 10%;
-width: 23%;
-height: 500px;
-}
-#image
-{
-width: 100%;
-}
-#input
-{
-width: 100%;
-}
-#right
-{
-float:left;
-text-align: left;
-overflow-y:auto;
-margin-right: 10%;width: 57%;
-height: 500px;
-}
-#overall
-{
-background-color: rgba(0, 0, 0, 0.5);
-margin: 10px;
-padding: 5px;
-}
-.colorusage
-{
-background-color: rgba(0, 0, 0, 0.5);
-margin: 10px;
-padding: 5px;
-}
-.colorusage p
-{
-margin: 0px 0px 0px 20px;
-}
-.colorusage_left
-{
-display: inline-block;
-vertical-align: middle;
-}
-.colorusage_color
-{
-width: 50px;
-height: 50px;
-margin: 5px;
-}
-.colorusage_right
-{
-display: inline-block;
-vertical-align: middle;
-}
-.colorusage_right p
-{
-margin-left: 0px;
-}
+body { background-color: #333333; color: #FFFFFF; }
+h3, h4 { margin: 0px; }
+#wrapper { text-align: center; }
+#left { float:left; margin-left: 10%; width: 23%; height: 500px; }
+#image, #file_input { width: 100%; }
+#right { float:left; text-align: left; overflow-y:auto; margin-right: 10%; width: 57%; height: 500px; }
+#overall { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; }
+.colorusage { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; }
+.colorusage p { margin: 0px 0px 0px 20px; }
+.colorusage_left { display: inline-block; vertical-align: middle; }
+.colorusage_color { width: 50px; height: 50px; margin: 5px; }
+.colorusage_right { display: inline-block; vertical-align: middle; }
+.colorusage_right p { margin-left: 0px; }
