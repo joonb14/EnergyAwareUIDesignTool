@@ -14,7 +14,9 @@
   <br>
   <div id="container">
     <div id="options">
-      <p><input type="checkbox" name="chk_info" value="mergeColors"> Merge Similar Colors </p>
+      <p>
+        <input id="mc" type="checkbox" name="chk_info" value="mergeColors"> Merge Similar Colors
+      </p>
     </div>
     <div id="left">
       {% if filename %}
@@ -22,34 +24,71 @@
       {% else %}
       <h1>no image</h1>
       {% endif %}
-      <form id="up_form" action="/upload" method="post" enctype="multipart/form-data" >
+      <form id="up_form" action="/upload" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="option" value="[0]">
         <input id="file_input" type="file" name="image">
       </form>
     </div>
     <div id="right">
       <div id="overall">
-        <h3>Overall - Total Power Usage: {{ Power }}mW</h3>
-        Red: {{ Red }}<br>
-        Green: {{ Green }}<br>
-        Blue: {{ Blue }}<br>
+        {% if RGBP %}
+          <h3>Overall - Total Power Usage: {{ RGBP[3] }}mW</h3>
+          Red: {{ RGBP[0] }}<br>
+          Green: {{ RGBP[1] }}<br>
+          Blue: {{ RGBP[2] }}<br>
+        {% else %}
+          <h3>Waiting for image</h3>
+        {% endif %}
       </div>
-      {% for colorInfo in colorUsage %}
-      <div class="colorusage">
-        <h4>{{ colorInfo[0] + 1 }}) RGB: {{ colorInfo[4] }} ({{ colorInfo[5] }}%)</h4>
-        <div class="colorusage_left"">
-          <div class="colorusage_color" style="background-color: rgb({{ colorInfo[1][0] }}, {{ colorInfo[1][1] }}, {{ colorInfo[1][2] }})";></div>
-        </div>
-        <div class="colorusage_right">
-          <p>Power Usage: {{ colorInfo[2] }}mW</p>
-          <p>Power Usage Ratio: {{ colorInfo[3] }}%</p>
-        </div>
-      </div>
-      {% endfor %}
+      <div id="colors"></div>
     </div>
   </div>
 </div>
 </body>
 <script type="text/javascript">
+  var colordiv_default =
+    "{% for colorInfo in colorUsage %} \
+    <div class='colorusage'> \
+      <h4>{{ colorInfo[0] + 1 }}) RGB: {{ colorInfo[4] }} ({{ colorInfo[5] }}%)</h4>\
+      <div class='colorusage_left'> \
+        <div class='colorusage_color' style='background-color: rgb({{ colorInfo[1][0] }}, {{ colorInfo[1][1] }}, {{ colorInfo[1][2] }})';></div> \
+      </div> \
+      <div class='colorusage_right'> \
+        <p>Power Usage: {{ colorInfo[2] }}mW</p> \
+        <p>Power Usage Ratio: {{ colorInfo[3] }}%</p> \
+      </div> \
+    </div> \
+    {% endfor %}";
+  
+  var colordiv_merge =
+    "{% for colorInfo in simColorUsage %} \
+    <div class='colorusage'> \
+      <h4>{{ colorInfo[0] + 1 }}) RGB: \
+      {% for colors in colorInfo[4] %} \
+        {{ colors }}, \
+      {% endfor %} \
+      ({{ colorInfo[5] }}%)</h4>\
+      <div class='colorusage_left'> \
+        {% for colors in colorInfo[1] %} \
+        <div class='colorusage_color' style='background-color: rgb({{ colors[0] }}, {{ colors[1] }}, {{ colors[2] }})';></div> \
+        {% endfor %} \
+      </div> \
+      <div class='colorusage_right'> \
+        <p>Power Usage: {{ colorInfo[2] }}mW</p> \
+        <p>Power Usage Ratio: {{ colorInfo[3] }}%</p> \
+      </div> \
+    </div> \
+    {% endfor %}";
+
+  $('#colors').html(colordiv_default);
+
+  $('#options').on('change', function(){
+    if($('#mc').prop('checked'))
+      $('#colors').html(colordiv_merge);
+    else
+      $('#colors').html(colordiv_default);
+  });
+
   $('#file_input').on('change', function(){
     $('#up_form').submit();
   });

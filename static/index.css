@@ -8,6 +8,6 @@ h3, h4 { margin: 0px; }
 .colorusage { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; }
 .colorusage p { margin: 0px 0px 0px 20px; }
 .colorusage_left { display: inline-block; vertical-align: middle; }
-.colorusage_color { width: 50px; height: 50px; margin: 5px; }
+.colorusage_color { width: 50px; height: 50px; margin: 5px; float: left;}
 .colorusage_right { display: inline-block; vertical-align: middle; }
 .colorusage_right p { margin-left: 0px; }

@@ -85,12 +85,11 @@ def upload_file():
 	predicted_power = predicted_power / pixel_cnt
 	#print(np.mean(median_pixels,axis=0))
 	
-	# pick 3 most used colors
-
+	# pick n most used colors
 	color_dict = {}
 	for index, row in end.iterrows():
 	    index = str(row['R'])+','+str(row['G'])+','+str(row['B'])
-	    #print(index)
+	    
 	    if index in color_dict:
 	        color_dict[index] = color_dict.get(index) + 1
 	    else:
@@ -98,30 +97,86 @@ def upload_file():
         
 	sorted_color_list = sorted(color_dict.items(), key=lambda x:x[1], reverse=True)
 
-	most, most_string, most_power, most_ratio, most_name, most_per = [], [], [], [], [], []
-	for i in range(0, 10):
-		most.append(sorted_color_list[i])
-		most_string.append(list(map(int, most[i][0].split(','))))
-		mR = most_string[i][0]
-		mG = most_string[i][1]
-		mB = most_string[i][2]
-		most_power.append(((clf.predict([[mR/255, mG/255, mB/255]]) + 200) * most[i][1] / (x_delta * y_delta)).round(2))
-		most_ratio.append((most_power[i] / predicted_power * 100).round(2))
-		most_name.append(("0x%0.2X" % mR) + ("0x%0.2X" % mG)[2:] + ("0x%0.2X" % mB)[2:])
-		most_per.append(round(sorted_color_list[i][1] / (x_delta * y_delta) * 100, 2))
-
-	# ABCD
-	# To send R. G. B value to index.html 
-	# create parameter Red Green Blue, then send R,G,B value
 	colorUsage = []
 	for i in range(0, 10):
-		colorUsage.append([i, most_string[i], most_power[i], most_ratio[i], most_name[i], most_per[i]])
+		most = sorted_color_list[i]
+		most_rgb = list(map(int, most[0].split(',')))
+		mR = most_rgb[0]
+		mG = most_rgb[1]
+		mB = most_rgb[2]
+		most_power = (clf.predict([[mR/255, mG/255, mB/255]]) + 200) * most[1] / (x_delta * y_delta)
+		most_ratio = (most_power / predicted_power * 100).round(2)
+		most_name = ("0x%0.2X" % mR) + ("0x%0.2X" % mG)[2:] + ("0x%0.2X" % mB)[2:]
+		most_per = round(sorted_color_list[i][1] / (x_delta * y_delta) * 100, 2)
 
-	return render_template('index.html', filename = filename ,Red = round(R, 2), Green = round(G, 2), Blue = round(B, 2), Power = round(predicted_power, 2), colorUsage = colorUsage)
+		most_power = most_power.round(2)
 
-@app.route('/upload_with_option')
-def upload_file_with_option():
-	return render_template('index.html', filename = filename ,Red = round(R, 2), Green = round(G, 2), Blue = round(B, 2), Power = round(predicted_power, 2), colorUsage = colorUsage)
+		colorUsage.append([i, most_rgb, most_power, most_ratio, most_name, most_per])
+
+
+	# RGBP
+	# To send rounded R, G, B, Power value to index.html 
+	# create parameter Red Green Blue, then send R,G,B value
+	RGBP = [round(R, 2), round(G, 2), round(B, 2), round(predicted_power, 2)]
+
+
+
+	# find similar colors
+
+	# similar_color_list = [[[similar colors], num], [], ... []]
+	# ex) [[[[0, 0, 0], [0, 2, 0]], 5], [[[255, 255, 255], [248, 255, 255]], 14]]
+
+	similar_color_list = []
+
+	for index in color_dict:
+	    r = int(index.split(',')[0])
+	    g = int(index.split(',')[1])
+	    b = int(index.split(',')[2])
+	    
+	    similar = False
+	    simIndex = 0
+	    for mem in similar_color_list:
+	        c = mem[0][0]
+	        if abs(c[0] - r) + abs(c[1] - g) + abs(c[2] - b) < 10:
+	            similar = True
+	            break
+	            
+	        simIndex += 1
+    
+	    if similar:
+	        similar_color_list[simIndex][0].append([r, g, b])
+	        similar_color_list[simIndex][1] += color_dict[index]
+	    else:
+	        similar_color_list.append([[[r, g, b]], color_dict[index]])
+
+	similar_color_list.sort(key=lambda x:x[1], reverse=True)
+	
+	
+	simColorUsage = []
+	for i in range(0, 10):
+		most = similar_color_list[i]
+
+		most_srgb = []
+		most_spower = 0
+		most_sname = []
+		most_sper = 0
+		for j in most[0]:
+			most_srgb.append(j)
+			mR = j[0]
+			mG = j[1]
+			mB = j[2]
+			most_spower += (clf.predict([[mR/255, mG/255, mB/255]]) + 200) * most[1] / (x_delta * y_delta)
+			most_sname.append(("0x%0.2X" % mR) + ("0x%0.2X" % mG)[2:] + ("0x%0.2X" % mB)[2:])
+
+		most_sratio = most_spower / predicted_power * 100
+		most_spower = most_spower.round(2)
+		most_sratio = most_sratio.round(2)
+		most_sper = round(similar_color_list[i][1] / (x_delta * y_delta) * 100, 2)
+
+		simColorUsage.append([i, most_srgb, most_spower, most_sratio, most_sname, most_sper])
+
+
+	return render_template('index.html', filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage)
 
 @app.route('/uploads/<filename>')
 def send_file(filename):
