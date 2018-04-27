@@ -23,22 +23,23 @@ def index():
 
 @app.route('/upload', methods = ['POST'])
 def upload_file():
-	file = request.files['image']
-	filename = secure_filename(file.filename)
-	f = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-	file.save(f)
-
 	phone = request.form['phone']
+
+	if 'image' in request.files:
+		file = request.files['image']
+		filename = secure_filename(file.filename)
+		f = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+		file.save(f)
+	else:
+		filename = request.form['hidden']
+
+	open_filename = 'uploads/' + filename
 
 	"""
 	image processing code
 	"""
 
-	open_filename = 'uploads/' + filename
 	im = Image.open(open_filename, 'r') # image that has lots of color 
-	# im = Image.open('City.jpg', 'r') # image that has lots of black
-
 	x, y = im.size
 	if y > x:
 		im = im.rotate(90, expand=True)
@@ -187,7 +188,7 @@ def upload_file():
 	#colorUsage.sort(key=lambda x:x[2], reverse=True)
 	#simColorUsage.sort(key=lambda x:x[2], reverse=True)
 
-	return render_template('index.html', filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage)
+	return render_template('index.html', phone = phone, filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage)
 
 @app.route('/uploads/<filename>')
 def send_file(filename):

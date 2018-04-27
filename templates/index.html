@@ -13,27 +13,27 @@
   </header>
   <br>
   <div id="container">
-    <div id="options">
-      <form id="up_form" action="/upload" method="post" enctype="multipart/form-data">
-      <p>
-        Phone
-        <select id="phone" name="phone">
-          <option value="gn5">Galaxy Note 5</option>
-          <option value="pxl">Pixel XL</option>
-        </select>
-        | Merge Similar Colors <input id="mc" type="checkbox" name="chk_info" value="mergeColors">
-      </p>
-    </div>
-    <div id="left">
-      {% if filename %}
-      <img id="image" src="{{ url_for('send_file', filename=filename) }}">
-      {% else %}
-      <h1>no image</h1>
-      {% endif %}
-        <input type="hidden" name="option" value="[0]">
-        <input id="file_input" type="file" name="image">
-      </form>
-    </div>
+    <form id="up_form" action="/upload" method="post" enctype="multipart/form-data">
+      <div id="options">
+        <p>
+          Phone
+          <select id="phone" name="phone">
+            <option value="gn5">Galaxy Note 5</option>
+            <option value="pxl">Pixel XL</option>
+          </select>
+          | Merge Similar Colors <input id="mc" name="chk_info" type="checkbox">
+        </p>
+      </div>
+      <div id="left">
+        {% if filename %}
+        <img id="image" src="{{ url_for('send_file', filename=filename) }}">
+        {% else %}
+        <h1>no image</h1>
+        {% endif %}
+          <input type="hidden" name="hidden" value="{{ filename }}">
+          <input id="file_input" name="image" type="file">
+      </div>
+    </form>
     <div id="right">
       <div id="overall">
         {% if RGBP %}
@@ -41,6 +41,7 @@
           Average red: {{ RGBP[0] }}<br>
           Average green: {{ RGBP[1] }}<br>
           Average blue: {{ RGBP[2] }}<br>
+          <div id="colorGraph"></div>
         {% else %}
           <h3>Waiting for image</h3>
         {% endif %}
@@ -86,6 +87,9 @@
     {% endfor %}";
 
   $('#colors').html(colordiv_default);
+  {% if phone %}
+    $('#phone').val('{{ phone }}').prop('selected', true);
+  {% endif %}
 
   $('#options').on('change', function(){
     if($('#mc').prop('checked'))
@@ -94,9 +98,11 @@
       $('#colors').html(colordiv_default);
   });
 
-  $('#phone').on('change', function(){
-    $('#up_form').submit();
-  });
+  {% if filename %}
+    $('#phone').on('change', function(){
+      $('#up_form').submit();
+    });
+  {% endif %}
 
   $('#file_input').on('change', function(){
     $('#up_form').submit();
