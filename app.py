@@ -11,6 +11,7 @@ import pickle
 #anaconda prompt: activate flask
 
 UPLOAD_FOLDER = os.path.basename('uploads')
+ROUND_NUM = 3
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -28,12 +29,14 @@ def upload_file():
 
 	file.save(f)
 
+	phone = request.form['phone']
+
 	"""
 	image processing code
 	"""
 
 	open_filename = 'uploads/' + filename
-	im = Image.open(open_filename, 'r') #image that has lots of color 
+	im = Image.open(open_filename, 'r') # image that has lots of color 
 	# im = Image.open('City.jpg', 'r') # image that has lots of black
 
 	x, y = im.size
@@ -74,12 +77,18 @@ def upload_file():
 	"""
 
 	R, G, B = np.mean(end_pixels, axis=0)
-	#predicted_power = clf.predict([[R/255, G/255, B/255]])[0] + 200
+	#predicted_power = clf.predict([[R/255, G/255, B/255]])[0]
 	predicted_power = 0
 	pixel_cnt = 0
-	clf = joblib.load('model/power_svm.pkl')
+
+	# select appropriate model
+	if phone == 'gn5':
+		clf = joblib.load('model/power_svm_gn5.pkl')
+	elif phone == 'pxl':
+		clf = joblib.load('model/power_svm_pxl.pkl')
+
 	for i in end_pixels:
-		tmp_power = clf.predict([[i[0]/255, i[1]/255, i[2]/255]])[0] + 200
+		tmp_power = clf.predict([[i[0]/255, i[1]/255, i[2]/255]])[0]
 		predicted_power = predicted_power + tmp_power
 		pixel_cnt = pixel_cnt + 1
 	predicted_power = predicted_power / pixel_cnt
@@ -104,12 +113,12 @@ def upload_file():
 		mR = most_rgb[0]
 		mG = most_rgb[1]
 		mB = most_rgb[2]
-		most_power = (clf.predict([[mR/255, mG/255, mB/255]]) + 200) * most[1] / (x_delta * y_delta)
-		most_ratio = (most_power / predicted_power * 100).round(2)
+		most_power = clf.predict([[mR/255, mG/255, mB/255]]) * most[1] / (x_delta * y_delta)
+		most_ratio = (most_power / predicted_power * 100).round(ROUND_NUM)
 		most_name = ("0x%0.2X" % mR) + ("0x%0.2X" % mG)[2:] + ("0x%0.2X" % mB)[2:]
-		most_per = round(sorted_color_list[i][1] / (x_delta * y_delta) * 100, 2)
+		most_per = round(sorted_color_list[i][1] / (x_delta * y_delta) * 100, ROUND_NUM)
 
-		most_power = most_power.round(2)
+		most_power = most_power.round(ROUND_NUM)
 
 		colorUsage.append([i, most_rgb, most_power, most_ratio, most_name, most_per])
 
@@ -117,7 +126,7 @@ def upload_file():
 	# RGBP
 	# To send rounded R, G, B, Power value to index.html 
 	# create parameter Red Green Blue, then send R,G,B value
-	RGBP = [round(R, 2), round(G, 2), round(B, 2), round(predicted_power, 2)]
+	RGBP = [round(R, ROUND_NUM), round(G, ROUND_NUM), round(B, ROUND_NUM), round(predicted_power, ROUND_NUM)]
 
 
 
@@ -146,11 +155,11 @@ def upload_file():
 	    if similar:
 	        similar_color_list[simIndex][0].append([r, g, b])
 	        similar_color_list[simIndex][1] += color_dict[index]
+	        similar_color_list[simIndex][2].append(color_dict[index])
 	    else:
-	        similar_color_list.append([[[r, g, b]], color_dict[index]])
+	        similar_color_list.append([[[r, g, b]], color_dict[index], [color_dict[index]]])
 
 	similar_color_list.sort(key=lambda x:x[1], reverse=True)
-	
 	
 	simColorUsage = []
 	for i in range(0, 10):
@@ -160,21 +169,23 @@ def upload_file():
 		most_spower = 0
 		most_sname = []
 		most_sper = 0
-		for j in most[0]:
-			most_srgb.append(j)
-			mR = j[0]
-			mG = j[1]
-			mB = j[2]
-			most_spower += (clf.predict([[mR/255, mG/255, mB/255]]) + 200) * most[1] / (x_delta * y_delta)
+		for j in range(len(most[0])):
+			most_srgb.append(most[0][j])
+			mR = most[0][j][0]
+			mG = most[0][j][1]
+			mB = most[0][j][2]
+			most_spower += clf.predict([[mR/255, mG/255, mB/255]]) * most[2][j] / (x_delta * y_delta)
 			most_sname.append(("0x%0.2X" % mR) + ("0x%0.2X" % mG)[2:] + ("0x%0.2X" % mB)[2:])
 
 		most_sratio = most_spower / predicted_power * 100
-		most_spower = most_spower.round(2)
-		most_sratio = most_sratio.round(2)
-		most_sper = round(similar_color_list[i][1] / (x_delta * y_delta) * 100, 2)
+		most_spower = most_spower.round(ROUND_NUM)
+		most_sratio = most_sratio.round(ROUND_NUM)
+		most_sper = round(similar_color_list[i][1] / (x_delta * y_delta) * 100, ROUND_NUM)
 
 		simColorUsage.append([i, most_srgb, most_spower, most_sratio, most_sname, most_sper])
 
+	#colorUsage.sort(key=lambda x:x[2], reverse=True)
+	#simColorUsage.sort(key=lambda x:x[2], reverse=True)
 
 	return render_template('index.html', filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage)
 

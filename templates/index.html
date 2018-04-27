@@ -14,8 +14,14 @@
   <br>
   <div id="container">
     <div id="options">
+      <form id="up_form" action="/upload" method="post" enctype="multipart/form-data">
       <p>
-        <input id="mc" type="checkbox" name="chk_info" value="mergeColors"> Merge Similar Colors
+        Phone
+        <select id="phone" name="phone">
+          <option value="gn5">Galaxy Note 5</option>
+          <option value="pxl">Pixel XL</option>
+        </select>
+        | Merge Similar Colors <input id="mc" type="checkbox" name="chk_info" value="mergeColors">
       </p>
     </div>
     <div id="left">
@@ -24,7 +30,6 @@
       {% else %}
       <h1>no image</h1>
       {% endif %}
-      <form id="up_form" action="/upload" method="post" enctype="multipart/form-data">
         <input type="hidden" name="option" value="[0]">
         <input id="file_input" type="file" name="image">
       </form>
@@ -33,9 +38,9 @@
       <div id="overall">
         {% if RGBP %}
           <h3>Overall - Total Power Usage: {{ RGBP[3] }}mW</h3>
-          Red: {{ RGBP[0] }}<br>
-          Green: {{ RGBP[1] }}<br>
-          Blue: {{ RGBP[2] }}<br>
+          Average red: {{ RGBP[0] }}<br>
+          Average green: {{ RGBP[1] }}<br>
+          Average blue: {{ RGBP[2] }}<br>
         {% else %}
           <h3>Waiting for image</h3>
         {% endif %}
@@ -87,6 +92,10 @@
       $('#colors').html(colordiv_merge);
     else
       $('#colors').html(colordiv_default);
+  });
+
+  $('#phone').on('change', function(){
+    $('#up_form').submit();
   });
 
   $('#file_input').on('change', function(){
