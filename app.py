@@ -83,10 +83,12 @@ def upload_file():
 	pixel_cnt = 0
 
 	# select appropriate model
-	if phone == 'gn5':
-		clf = joblib.load('model/power_svm_gn5.pkl')
-	elif phone == 'pxl':
-		clf = joblib.load('model/power_svm_pxl.pkl')
+	if phone == 'gn5movie':
+		clf = joblib.load('model/power_svm_gn5_movie.pkl')
+	elif phone == 'pxldefault':
+		clf = joblib.load('model/power_svm_pxl_default.pkl')
+	elif phone == 'pxlpicture':
+                clf = joblib.load('model/power_svm_pxl_picture.pkl')
 
 	for i in end_pixels:
 		tmp_power = clf.predict([[i[0]/255, i[1]/255, i[2]/255]])[0]
