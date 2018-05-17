@@ -162,8 +162,6 @@ def upload_file():
 	        similar_color_list[simIndex][2].append(color_dict[index])
 	        
 	        new = similar_color_list[simIndex][3][0]
-	        print('hello')
-	        print(new)
 	        new[0] = (new[0]*similar_color_num[simIndex]+r)/(similar_color_num[simIndex]+1)
 	        new[1] = (new[1]*similar_color_num[simIndex]+g)/(similar_color_num[simIndex]+1)
 	        new[2] = (new[2]*similar_color_num[simIndex]+b)/(similar_color_num[simIndex]+1)
