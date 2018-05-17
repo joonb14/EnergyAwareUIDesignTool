@@ -86,10 +86,12 @@ def upload_file():
 	pixel_cnt = 0
 
 	# select appropriate model
-	if phone == 'gn5':
-		clf = joblib.load('model/power_svm_gn5.pkl')
-	elif phone == 'pxl':
-		clf = joblib.load('model/power_svm_pxl.pkl')
+	if phone == 'gn5movie':
+		clf = joblib.load('model/power_svm_gn5_movie.pkl')
+	elif phone == 'pxldefault':
+		clf = joblib.load('model/power_svm_pxl_default.pkl')
+	elif phone == 'pxlpicture':
+                clf = joblib.load('model/power_svm_pxl_picture.pkl')
 
 	for i in end_pixels:
 		tmp_power = clf.predict([[i[0]/255, i[1]/255, i[2]/255]])[0]
@@ -140,6 +142,7 @@ def upload_file():
 	# ex) [[[[0, 0, 0], [0, 2, 0]], 5], [[[255, 255, 255], [248, 255, 255]], 14]]
 
 	similar_color_list = []
+	similar_color_num = []
 
 	for index in color_dict:
 	    r = int(index.split(',')[0])
@@ -149,7 +152,7 @@ def upload_file():
 	    similar = False
 	    simIndex = 0
 	    for mem in similar_color_list:
-	        c = mem[0][0]
+	        c = mem[3][0]
 	        if abs(c[0] - r) + abs(c[1] - g) + abs(c[2] - b) < 10:
 	            similar = True
 	            break
@@ -160,8 +163,21 @@ def upload_file():
 	        similar_color_list[simIndex][0].append([r, g, b])
 	        similar_color_list[simIndex][1] += color_dict[index]
 	        similar_color_list[simIndex][2].append(color_dict[index])
+	        
+	        new = similar_color_list[simIndex][3][0]
+	        print('hello')
+	        print(new)
+	        new[0] = (new[0]*similar_color_num[simIndex]+r)/(similar_color_num[simIndex]+1)
+	        new[1] = (new[1]*similar_color_num[simIndex]+g)/(similar_color_num[simIndex]+1)
+	        new[2] = (new[2]*similar_color_num[simIndex]+b)/(similar_color_num[simIndex]+1)
+	        similar_color_list[simIndex][3].append(new)
+	        del similar_color_list[simIndex][3][0]
+	        similar_color_num[simIndex] += 1
+	        
+            
 	    else:
-	        similar_color_list.append([[[r, g, b]], color_dict[index], [color_dict[index]]])
+	        similar_color_list.append([[[r, g, b]], color_dict[index], [color_dict[index]], [[r, g, b]]])
+	        similar_color_num.append(1)
 
 	similar_color_list.sort(key=lambda x:x[1], reverse=True)
 	
