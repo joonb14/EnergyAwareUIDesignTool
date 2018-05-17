@@ -43,6 +43,9 @@ def upload_file():
 	x, y = im.size
 	if y > x:
 		im = im.rotate(90, expand=True)
+		rotated = True
+	else:
+		rotated = False
 
 	x, y = im.size
 	x_delta = 64
@@ -121,7 +124,7 @@ def upload_file():
 
 		most_power = most_power.round(ROUND_NUM)
 
-		colorUsage.append([i, most_rgb, most_power, most_ratio, most_name, most_per])
+		colorUsage.append([i, most_rgb, most_power, most_ratio[0], most_name, most_per])
 
 
 	# RGBP
@@ -188,7 +191,68 @@ def upload_file():
 	#colorUsage.sort(key=lambda x:x[2], reverse=True)
 	#simColorUsage.sort(key=lambda x:x[2], reverse=True)
 
-	return render_template('index.html', phone = phone, filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage)
+	'''
+	Recommended Image
+	'''
+
+	Red_num, Green_num, Blue_num = 0, 0, 0
+
+	for index, row in end.iterrows():
+		if int(row['R']) > int(row['G']) and int(row['R']) > int(row['B']):
+			Red_num += 1
+		elif int(row['B']) > int(row['G']) and int(row['B']) > int(row['R']):
+			Blue_num += 1
+		elif int(row['G']) > int(row['B']) and int(row['G']) > int(row['R']):
+			Green_num += 1
+
+	r, g, b = im.split()
+	        
+	if Red_num >= Blue_num and Blue_num >= Green_num:
+	    out = Image.merge("RGB", (r, b, g))
+	elif Red_num >= Green_num and Green_num >= Blue_num:
+	    out = Image.merge("RGB", (r, g, b))
+	elif Green_num >= Blue_num and Blue_num >= Red_num:
+	    out = Image.merge("RGB", (g, b, r))
+	elif Green_num >= Red_num and Red_num >= Blue_num:
+	    out = Image.merge("RGB", (g, r, b))
+	elif Blue_num >= Red_num and Red_num >= Green_num:
+	    out = Image.merge("RGB", (b, r, g))
+	elif Blue_num >= Green_num and Green_num >= Red_num:
+	    out = Image.merge("RGB", (b, g, r))
+
+	if rotated:
+		out = out.rotate(-90, expand=True)
+	out.save("uploads/modified_file.jpg");
+
+	x, y = out.size
+	counting_pixels = (x_delta*y_delta) # will be 2304 for almost all resolutions
+	all_pixel = out.load()
+	x_offset = x//x_delta
+	y_offset = y//y_delta
+
+	pixels = []
+	for i in range(x_delta):
+	    for j in range(y_delta):
+	        pixels.append(all_pixel[(i+1)*x_offset-1,(j+1)*y_offset-1])
+
+	end_pixels = np.array(pixels)
+	end = pd.DataFrame(pixels)
+	end.rename(columns={0: 'R', 1: 'G', 2: 'B'}, inplace=True)
+
+	R, G, B = np.mean(end_pixels, axis=0)
+	#predicted_power = clf.predict([[R/255, G/255, B/255]])[0]
+	mpower = 0
+	pixel_cnt = 0
+
+	for i in end_pixels:
+		tmp_power = clf.predict([[i[0]/255, i[1]/255, i[2]/255]])[0]
+		mpower += tmp_power
+		pixel_cnt += 1
+	mpower /= pixel_cnt
+
+	mPP = [round(mpower, ROUND_NUM), round((predicted_power - mpower) / predicted_power * 100, ROUND_NUM)]
+
+	return render_template('index.html', phone = phone, filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage, mPP = mPP)
 
 @app.route('/uploads/<filename>')
 def send_file(filename):

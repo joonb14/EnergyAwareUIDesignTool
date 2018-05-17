@@ -1,13 +1,19 @@
 body { background-color: #333333; color: #FFFFFF; }
 h3, h4 { margin: 0px; }
 #wrapper { text-align: center; }
-#left { float:left; margin-left: 10%; width: 23%; height: 500px; }
+#left { float: left; margin-left: 5%; width: 18%; height: 500px; }
 #image, #file_input { width: 100%; }
-#right { float:left; text-align: left; overflow-y:auto; margin-right: 10%; width: 57%; height: 500px; }
-#overall { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; }
+#right { float: left; text-align: left; width: 50%; }
+#overall { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; height: 100px;}
 .colorusage { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; }
 .colorusage p { margin: 0px 0px 0px 20px; }
 .colorusage_left { display: inline-block; vertical-align: middle; }
 .colorusage_color { width: 50px; height: 50px; margin: 5px; float: left;}
 .colorusage_right { display: inline-block; vertical-align: middle; }
 .colorusage_right p { margin-left: 0px; }
+
+#colorGraph { margin: 20px; display:inline; width: 80%; height: 30px; }
+.colorgraph_stick { margin: 0px; padding: 0px; float: left; display:inline; height: 30px; }
+
+#after { float: left; margin-left: 2%; margin-right: 5%; width: 18%; height: 500px; }
+#mimage { width: 100%; }
