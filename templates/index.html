@@ -20,10 +20,15 @@
           <select id="phone" name="phone">
             <option value="gn5movie">Galaxy Note 5</option>
             <option value="pxldefault">Pixel XL default</option>
-	  <option value="pxlpicture">Pixel XL picture</option>
+            <option value="pxlpicture">Pixel XL picture</option>
           </select>
           | Merge Similar Colors <input id="mc" name="chk_info" type="checkbox">
-          | Show Recommended Image <input id="srimg" name="chk_srimg" type="checkbox">
+          | Translate
+          <select id="translate" name="translate">
+            <option value="rgborder">RGB Order</option>
+            <option value="greyscale">GreyScale</option>
+            <option value="inverted">Inverted + RGB Order</option>
+          </select>
         </p>
       </div>
       <div id="left">
@@ -58,14 +63,15 @@
     </div>
     <div id="after">
       <p>Modified Image</p>
-      <div id="mimage"></div>
-      {% if filename %}
-      <img id="mimage" src="/uploads/modified_file.jpg">
-      <p>predicted power: {{ mPP[0] }}mW </p>
-      <p>{{ mPP[1] }}% reduced</p>
-      {% else %}
-      <h1>no image</h1>
-      {% endif %}
+      <div id="mimagediv">
+        {% if filename %}
+        <img id="mimage" src="uploads/translated_image.jpg">
+        <p>predicted power: {{ trInfo[0] }}mW </p>
+        <p>{{ trInfo[1] }}% reduced</p>
+        {% else %}
+        <h1>no image</h1>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>
@@ -106,8 +112,15 @@
     {% endfor %}";
 
   $('#colors').html(colordiv_default);
-  {% if phone %}
-    $('#phone').val('{{ phone }}').prop('selected', true);
+
+  {% if check %}
+    {% if check[0] %}
+      $('#phone').val('{{ check[0] }}').prop('selected', true);
+    {% endif %}
+
+    {% if check[1] %}
+      $('#translate').val('{{ check[1] }}').prop('selected', true);
+    {% endif %}
   {% endif %}
 
   $('#options').on('change', function(){
@@ -119,6 +132,9 @@
 
   {% if filename %}
     $('#phone').on('change', function(){
+      $('#up_form').submit();
+    });
+    $('#translate').on('change', function(){
       $('#up_form').submit();
     });
   {% endif %}

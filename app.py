@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn import svm
 from sklearn.externals import joblib
 import pickle
+import translate as tr
 
 #anaconda prompt: activate flask
 
@@ -16,6 +17,9 @@ ROUND_NUM = 3
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+def toRound(arg):
+	return round(arg, ROUND_NUM)
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -24,6 +28,8 @@ def index():
 @app.route('/upload', methods = ['POST'])
 def upload_file():
 	phone = request.form['phone']
+	translate = request.form['translate']
+	check = [phone, translate]
 
 	if 'image' in request.files:
 		file = request.files['image']
@@ -39,51 +45,11 @@ def upload_file():
 	image processing code
 	"""
 
-	im = Image.open(open_filename, 'r') # image that has lots of color 
+	im = Image.open(open_filename, 'r') # image that has lots of color
 	x, y = im.size
-	if y > x:
-		im = im.rotate(90, expand=True)
-		rotated = True
-	else:
-		rotated = False
 
-	x, y = im.size
-	x_delta = 64
-	y_delta = 36
-	counting_pixels = (x_delta*y_delta) # will be 2304 for almost all resolutions
-	all_pixel = im.load()
-	x_offset = x//x_delta
-	y_offset = y//y_delta
-
-	pixels = []
-	for i in range(x_delta):
-	    for j in range(y_delta):
-	        pixels.append(all_pixel[(i+1)*x_offset-1,(j+1)*y_offset-1])
-	        #print((i+1)*x_offset-1,(j+1)*y_offset-1)
-
-	end_pixels = np.array(pixels)
-	end = pd.DataFrame(pixels)
-	end.rename(columns={0: 'R', 1: 'G', 2: 'B'}, inplace=True)
-
-	"""
-	all_pixel = im.load()
-	x_offset = x//x_delta
-	y_offset = y//y_delta
-	pixels = []
-	for i in range(x_delta):
-	    for j in range(y_delta):
-	        pixels.append(all_pixel[i*x_offset+x_offset//2,j*y_offset+y_offset//2])
-	        #print(i*x_offset+x_offset//2,j*y_offset+y_offset//2)
-
-	median_pixels = np.array(pixels)
-	median = pd.DataFrame(pixels)
-	median.rename(columns={0: 'R', 1: 'G', 2: 'B'}, inplace=True)
-	"""
-
-	R, G, B = np.mean(end_pixels, axis=0)
-	#predicted_power = clf.predict([[R/255, G/255, B/255]])[0]
-	predicted_power = 0
-	pixel_cnt = 0
+	x_delta = 36
+	y_delta = 64
 
 	# select appropriate model
 	if phone == 'gn5movie':
@@ -91,14 +57,12 @@ def upload_file():
 	elif phone == 'pxldefault':
 		clf = joblib.load('model/power_svm_pxl_default.pkl')
 	elif phone == 'pxlpicture':
-                clf = joblib.load('model/power_svm_pxl_picture.pkl')
+		clf = joblib.load('model/power_svm_pxl_picture.pkl')
 
-	for i in end_pixels:
-		tmp_power = clf.predict([[i[0]/255, i[1]/255, i[2]/255]])[0]
-		predicted_power = predicted_power + tmp_power
-		pixel_cnt = pixel_cnt + 1
-	predicted_power = predicted_power / pixel_cnt
-	#print(np.mean(median_pixels,axis=0))
+	predicted_power = tr.PredictedPower(im, clf)
+	end = tr.toEnd(im)
+	end_pixels = tr.toEndPixels(im)
+	R, G, B = np.mean(end_pixels, axis=0)
 	
 	# pick n most used colors
 	color_dict = {}
@@ -122,7 +86,7 @@ def upload_file():
 		most_power = clf.predict([[mR/255, mG/255, mB/255]]) * most[1] / (x_delta * y_delta)
 		most_ratio = (most_power / predicted_power * 100).round(ROUND_NUM)
 		most_name = ("0x%0.2X" % mR) + ("0x%0.2X" % mG)[2:] + ("0x%0.2X" % mB)[2:]
-		most_per = round(sorted_color_list[i][1] / (x_delta * y_delta) * 100, ROUND_NUM)
+		most_per = toRound(sorted_color_list[i][1] / (x_delta * y_delta) * 100)
 
 		most_power = most_power.round(ROUND_NUM)
 
@@ -132,7 +96,7 @@ def upload_file():
 	# RGBP
 	# To send rounded R, G, B, Power value to index.html 
 	# create parameter Red Green Blue, then send R,G,B value
-	RGBP = [round(R, ROUND_NUM), round(G, ROUND_NUM), round(B, ROUND_NUM), round(predicted_power, ROUND_NUM)]
+	RGBP = [toRound(R), toRound(G), toRound(B), toRound(predicted_power)]
 
 
 
@@ -165,8 +129,6 @@ def upload_file():
 	        similar_color_list[simIndex][2].append(color_dict[index])
 	        
 	        new = similar_color_list[simIndex][3][0]
-	        print('hello')
-	        print(new)
 	        new[0] = (new[0]*similar_color_num[simIndex]+r)/(similar_color_num[simIndex]+1)
 	        new[1] = (new[1]*similar_color_num[simIndex]+g)/(similar_color_num[simIndex]+1)
 	        new[2] = (new[2]*similar_color_num[simIndex]+b)/(similar_color_num[simIndex]+1)
@@ -200,7 +162,7 @@ def upload_file():
 		most_sratio = most_spower / predicted_power * 100
 		most_spower = most_spower.round(ROUND_NUM)
 		most_sratio = most_sratio.round(ROUND_NUM)
-		most_sper = round(similar_color_list[i][1] / (x_delta * y_delta) * 100, ROUND_NUM)
+		most_sper = toRound(similar_color_list[i][1] / (x_delta * y_delta) * 100)
 
 		simColorUsage.append([i, most_srgb, most_spower, most_sratio, most_sname, most_sper])
 
@@ -211,64 +173,21 @@ def upload_file():
 	Recommended Image
 	'''
 
-	Red_num, Green_num, Blue_num = 0, 0, 0
+	if translate == "rgborder":
+		trImage = tr.RGBOrder(im, end)
+	elif translate == "greyscale":
+		trImage = tr.GreyScale(im)
+	elif translate == "inverted":
+		trImage = tr.Inverted(im, end)
 
-	for index, row in end.iterrows():
-		if int(row['R']) > int(row['G']) and int(row['R']) > int(row['B']):
-			Red_num += 1
-		elif int(row['B']) > int(row['G']) and int(row['B']) > int(row['R']):
-			Blue_num += 1
-		elif int(row['G']) > int(row['B']) and int(row['G']) > int(row['R']):
-			Green_num += 1
+	trImage.save("uploads/translated_image.jpg");
 
-	r, g, b = im.split()
-	        
-	if Red_num >= Blue_num and Blue_num >= Green_num:
-	    out = Image.merge("RGB", (r, b, g))
-	elif Red_num >= Green_num and Green_num >= Blue_num:
-	    out = Image.merge("RGB", (r, g, b))
-	elif Green_num >= Blue_num and Blue_num >= Red_num:
-	    out = Image.merge("RGB", (g, b, r))
-	elif Green_num >= Red_num and Red_num >= Blue_num:
-	    out = Image.merge("RGB", (g, r, b))
-	elif Blue_num >= Red_num and Red_num >= Green_num:
-	    out = Image.merge("RGB", (b, r, g))
-	elif Blue_num >= Green_num and Green_num >= Red_num:
-	    out = Image.merge("RGB", (b, g, r))
+	trPower = tr.PredictedPower(trImage, clf)
+	trRate = (predicted_power - trPower) / predicted_power * 100
 
-	if rotated:
-		out = out.rotate(-90, expand=True)
-	out.save("uploads/modified_file.jpg");
+	trInfo = [toRound(trPower), toRound(trRate)]
 
-	x, y = out.size
-	counting_pixels = (x_delta*y_delta) # will be 2304 for almost all resolutions
-	all_pixel = out.load()
-	x_offset = x//x_delta
-	y_offset = y//y_delta
-
-	pixels = []
-	for i in range(x_delta):
-	    for j in range(y_delta):
-	        pixels.append(all_pixel[(i+1)*x_offset-1,(j+1)*y_offset-1])
-
-	end_pixels = np.array(pixels)
-	end = pd.DataFrame(pixels)
-	end.rename(columns={0: 'R', 1: 'G', 2: 'B'}, inplace=True)
-
-	R, G, B = np.mean(end_pixels, axis=0)
-	#predicted_power = clf.predict([[R/255, G/255, B/255]])[0]
-	mpower = 0
-	pixel_cnt = 0
-
-	for i in end_pixels:
-		tmp_power = clf.predict([[i[0]/255, i[1]/255, i[2]/255]])[0]
-		mpower += tmp_power
-		pixel_cnt += 1
-	mpower /= pixel_cnt
-
-	mPP = [round(mpower, ROUND_NUM), round((predicted_power - mpower) / predicted_power * 100, ROUND_NUM)]
-
-	return render_template('index.html', phone = phone, filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage, mPP = mPP)
+	return render_template('index.html', check = check, filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage, trInfo = trInfo)
 
 @app.route('/uploads/<filename>')
 def send_file(filename):
