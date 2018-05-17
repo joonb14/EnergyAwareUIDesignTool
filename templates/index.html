@@ -23,16 +23,18 @@
 	  <option value="pxlpicture">Pixel XL picture</option>
           </select>
           | Merge Similar Colors <input id="mc" name="chk_info" type="checkbox">
+          | Show Recommended Image <input id="srimg" name="chk_srimg" type="checkbox">
         </p>
       </div>
       <div id="left">
+        <p>Original Image</p>
         {% if filename %}
         <img id="image" src="{{ url_for('send_file', filename=filename) }}">
         {% else %}
         <h1>no image</h1>
         {% endif %}
-          <input type="hidden" name="hidden" value="{{ filename }}">
-          <input id="file_input" name="image" type="file">
+        <input type="hidden" name="hidden" value="{{ filename }}">
+        <input id="file_input" name="image" type="file">
       </div>
     </form>
     <div id="right">
@@ -42,12 +44,28 @@
           Average red: {{ RGBP[0] }}<br>
           Average green: {{ RGBP[1] }}<br>
           Average blue: {{ RGBP[2] }}<br>
-          <div id="colorGraph"></div>
+          <!--<div id="colorGraph">
+            {% for colorInfo in colorUsage %}
+              <div class='colorgraph_stick' style='background-color: rgb({{ colorInfo[1][0] }}, {{ colorInfo[1][1] }}, {{ colorInfo[1][2] }});
+              width: {{ colorInfo[3] }}%;'></div>
+            {% endfor %}
+          </div>-->
         {% else %}
           <h3>Waiting for image</h3>
         {% endif %}
       </div>
       <div id="colors"></div>
+    </div>
+    <div id="after">
+      <p>Modified Image</p>
+      <div id="mimage"></div>
+      {% if filename %}
+      <img id="mimage" src="/uploads/modified_file.jpg">
+      <p>predicted power: {{ mPP[0] }}mW </p>
+      <p>{{ mPP[1] }}% reduced</p>
+      {% else %}
+      <h1>no image</h1>
+      {% endif %}
     </div>
   </div>
 </div>
