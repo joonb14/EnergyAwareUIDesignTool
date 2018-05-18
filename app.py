@@ -189,7 +189,7 @@ def upload_file():
 	elif translate == "grecovery":
 		trImage = tr.GreyRecovery(im)
 
-	trImage.save("uploads/translated_image.jpg");
+	trImage.save("uploads/translated_image.jpg")
 
 	trPower = tr.PredictedPower(trImage, clf)
 	trRate = (predicted_power - trPower) / predicted_power * 100

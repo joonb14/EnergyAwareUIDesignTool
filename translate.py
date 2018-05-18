@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 import pandas as pd
+import subprocess
 
 def toPixels(im):
 	x, y = im.size
@@ -126,3 +127,17 @@ def Inverted(im, end):
 	    out = Image.merge("RGB", (b, g, r))
 
 	return out
+
+def GreyRecovery(im):
+        out = GreyScale(im)
+        out.save("uploads/greyscale_temp.jpg")
+
+        model_path="model/colorize.lua"
+        set_path="model/colornet.t7"
+        inputfilename = "uploads/greyscale_temp.jpg"
+        outfilename = "uploads/translated_image.jpg"
+
+        subprocess.call(["th",model_path,inputfilename,outfilename,set_path])
+        out = Image.open("uploads/translated_image.jpg", "r")
+
+        return out
