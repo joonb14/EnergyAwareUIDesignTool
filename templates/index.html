@@ -146,9 +146,18 @@
       $('#up_form').submit();
     });
 
-    $('#choose_num').html("<div class='blackbox'>Show <input id='list_num' name='list_num' type='number' value='{{ check[2] }}' min='1' max='{{ check[3] }}'> of color list. (1 ~ {{ check[3] }})</div>");
+    if($('#mc').prop('checked'))
+    {
+      $('#choose_num').html("<div class='blackbox'>Show <input id='list_num' name='list_num' type='number' value='{{ check[2] }}' min='1' max='{{ check[4] }}'> of color list. (1 ~ {{ check[4] }})</div>");
+      if($('#list_num').val() > {{ check[4] }})
+        $('#list_num').val({{ check[4] }});
+    }
+    else
+    {
+      $('#choose_num').html("<div class='blackbox'>Show <input id='list_num' name='list_num' type='number' value='{{ check[2] }}' min='1' max='{{ check[3] }}'> of color list. (1 ~ {{ check[3] }})</div>");
+    }
 
-    $('#mc').on('change', function(){
+    $('#mc').on('load change', function(){
       if($('#mc').prop('checked'))
       {
         $('#choose_num').html("<div class='blackbox'>Show <input id='list_num' name='list_num' type='number' value='{{ check[2] }}' min='1' max='{{ check[4] }}'> of color list. (1 ~ {{ check[4] }})</div>");
