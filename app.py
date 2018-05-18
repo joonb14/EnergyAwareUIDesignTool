@@ -29,7 +29,14 @@ def index():
 def upload_file():
 	phone = request.form['phone']
 	translate = request.form['translate']
-	check = [phone, translate]
+	if 'list_num' in request.form:
+		list_num = request.form['list_num']
+	else:
+		list_num = 10
+	if 'mc' in request.form:
+		mc = request.form['mc']
+	else:
+		mc = None
 
 	if 'image' in request.files:
 		file = request.files['image']
@@ -77,7 +84,7 @@ def upload_file():
 	sorted_color_list = sorted(color_dict.items(), key=lambda x:x[1], reverse=True)
 
 	colorUsage = []
-	for i in range(0, 10):
+	for i in range(int(list_num)):
 		most = sorted_color_list[i]
 		most_rgb = list(map(int, most[0].split(',')))
 		mR = most_rgb[0]
@@ -144,7 +151,7 @@ def upload_file():
 	similar_color_list.sort(key=lambda x:x[1], reverse=True)
 	
 	simColorUsage = []
-	for i in range(0, 10):
+	for i in range(min(int(list_num), len(similar_color_list))):
 		most = similar_color_list[i]
 
 		most_srgb = []
@@ -187,11 +194,22 @@ def upload_file():
 
 	trInfo = [toRound(trPower), toRound(trRate)]
 
+	list_max = len(sorted_color_list)
+	simlist_max = len(similar_color_list)
+	check = [phone, translate, list_num, list_max, simlist_max, mc]
+
 	return render_template('index.html', check = check, filename = filename, RGBP = RGBP, colorUsage = colorUsage, simColorUsage = simColorUsage, trInfo = trInfo)
 
 @app.route('/uploads/<filename>')
 def send_file(filename):
 	return send_from_directory(UPLOAD_FOLDER, filename)
+
+@app.after_request
+def add_header(r):
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
 
 if __name__ == '__main__':
 	app.run(debug=True)

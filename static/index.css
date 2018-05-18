@@ -4,9 +4,9 @@ h3, h4 { margin: 0px; }
 #left { float: left; margin-left: 5%; width: 18%; height: 500px; }
 #image, #file_input { width: 100%; }
 #right { float: left; text-align: left; width: 50%; }
-#overall { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; height: 100px;}
-.colorusage { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; }
-.colorusage p { margin: 0px 0px 0px 20px; }
+#overall { height: 100px;}
+.blackbox { background-color: rgba(0, 0, 0, 0.5); margin: 10px; padding: 5px; }
+.blackbox p { margin: 0px 0px 0px 20px; }
 .colorusage_left { display: inline-block; vertical-align: middle; }
 .colorusage_color { width: 50px; height: 50px; margin: 5px; float: left;}
 .colorusage_right { display: inline-block; vertical-align: middle; }
@@ -18,3 +18,5 @@ h3, h4 { margin: 0px; }
 #after { float: left; margin-left: 2%; margin-right: 5%; width: 18%; height: 500px; }
 #mimagediv { width: 100%; }
 #mimage { width: 100%; }
+
+#submit { float: right; }
