@@ -186,6 +186,8 @@ def upload_file():
 		trImage = tr.GreyScale(im)
 	elif translate == "inverted":
 		trImage = tr.Inverted(im, end)
+	elif translate == "achinvert":
+		trImage = tr.AchromaticInvert(im)
 	elif translate == "grecovery":
 		trImage = tr.GreyRecovery(im)
 
