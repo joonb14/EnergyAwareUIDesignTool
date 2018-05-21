@@ -152,7 +152,7 @@ def AchromaticInvert(im):
 	        if (abs(cur[0] - cur[1]) < 16) and (abs(cur[0] - cur[2])) < 16 and (abs(cur[1] - cur[2])) < 16:
 	            new = (255 - cur[0], 255 - cur[1], 255 - cur[2])
 	        else:
-	            new2 = cur
+	            new = cur
 	        out.putpixel((x,y), new)
 
 	return out
