@@ -9,7 +9,17 @@
 <body>
 <div id="wrapper">
   <header>
-    <h1>UI Power Usage Analyzation Tool</h1>
+    <div class="hd header-lleft"></div>
+    <div class="hd header-left">
+      <img src="{{ url_for('static', filename='low_battery.png') }}">
+    </div>
+    <div class="hd header-center">
+      <h1>UI Power Usage Analyzation Tool</h1>
+    </div>
+    <div class="hd header-right">
+      <img src="{{ url_for('static', filename='full_battery.png') }}">
+    </div>
+    <div class="hd header-rright"></div>
   </header>
   <br>
   <div id="container">
@@ -46,7 +56,7 @@
       <div id="right">
         <div id="overall" class="blackbox">
           {% if RGBP %}
-            <h3>Overall - Total Power Usage: {{ RGBP[3] }}mW</h3>
+            <h3>Overall - Total Power Usage: {{ RGBP[3] }}mW/s</h3>
             Average red: {{ RGBP[0] }}<br>
             Average green: {{ RGBP[1] }}<br>
             Average blue: {{ RGBP[2] }}<br>
@@ -69,7 +79,7 @@
       <div id="mimagediv">
         {% if filename %}
           <img id="mimage" src="uploads/translated_image.jpg">
-          <p>predicted power: {{ trInfo[0] }}mW </p>
+          <p>predicted power: {{ trInfo[0] }}mW/s </p>
           <p>{{ trInfo[1] }}% reduced</p>
         {% else %}
           <h1>no image</h1>
@@ -88,7 +98,7 @@
         <div class='colorusage_color' style='background-color: rgb({{ colorInfo[1][0] }}, {{ colorInfo[1][1] }}, {{ colorInfo[1][2] }})';></div> \
       </div> \
       <div class='colorusage_right'> \
-        <p>Power Usage: {{ colorInfo[2] }}mW</p> \
+        <p>Power Usage: {{ colorInfo[2][0] }}mW/s</p> \
         <p>Power Usage Ratio: {{ colorInfo[3] }}%</p> \
       </div> \
     </div> \
@@ -108,7 +118,7 @@
         {% endfor %} \
       </div> \
       <div class='colorusage_right'> \
-        <p>Power Usage: {{ colorInfo[2] }}mW</p> \
+        <p>Power Usage: {{ colorInfo[2][0] }}mW/s</p> \
         <p>Power Usage Ratio: {{ colorInfo[3] }}%</p> \
       </div> \
     </div> \
@@ -198,9 +208,9 @@
 
     //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
     $('#mask').css({
-     'width' : maskWidth
-     , 'height': maskHeight
-     , 'opacity' : '0.3'
+     'width' : maskWidth,
+     'height': maskHeight,
+     'opacity' : '0.3'
     });
 
     //마스크 표시
