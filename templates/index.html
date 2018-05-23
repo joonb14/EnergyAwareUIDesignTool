@@ -124,6 +124,10 @@
     </div> \
     {% endfor %}";
 
+  $('#up_form').submit(function(){
+      wrapWindowByMask();
+  });
+
   {% if check %}
     {% if check[0] %}
       $('#phone').val('{{ check[0] }}').prop('selected', true);
@@ -152,13 +156,12 @@
 
   {% if filename %}
     $('#phone').on('change', function(){
-      wrapWindowByMask();
       $('#up_form').submit();
     });
     $('#translate').on('change', function(){
-      wrapWindowByMask();
       $('#up_form').submit();
     });
+
 
     if($('#mc').prop('checked'))
     {
@@ -187,7 +190,6 @@
 
   $('#file_input').on('change', function(){
     $('#list_num').val(10);
-      wrapWindowByMask();
     $('#up_form').submit();
   });
 
