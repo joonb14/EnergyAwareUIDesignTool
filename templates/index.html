@@ -56,7 +56,7 @@
       <div id="right">
         <div id="overall" class="blackbox">
           {% if RGBP %}
-            <h3>Overall - Total Power Usage: {{ RGBP[3] }}mW/s</h3>
+            <h3>Overall - Total Power Usage: {{ RGBP[3] }}mW</h3>
             Average red: {{ RGBP[0] }}<br>
             Average green: {{ RGBP[1] }}<br>
             Average blue: {{ RGBP[2] }}<br>
@@ -79,7 +79,7 @@
       <div id="mimagediv">
         {% if filename %}
           <img id="mimage" src="uploads/translated_image.jpg">
-          <p>predicted power: {{ trInfo[0] }}mW/s </p>
+          <p>predicted power: {{ trInfo[0] }}mW </p>
           <p>{{ trInfo[1] }}% reduced</p>
         {% else %}
           <h1>no image</h1>
@@ -98,7 +98,7 @@
         <div class='colorusage_color' style='background-color: rgb({{ colorInfo[1][0] }}, {{ colorInfo[1][1] }}, {{ colorInfo[1][2] }})';></div> \
       </div> \
       <div class='colorusage_right'> \
-        <p>Power Usage: {{ colorInfo[2][0] }}mW/s</p> \
+        <p>Power Usage: {{ colorInfo[2][0] }}mW</p> \
         <p>Power Usage Ratio: {{ colorInfo[3] }}%</p> \
       </div> \
     </div> \
@@ -118,7 +118,7 @@
         {% endfor %} \
       </div> \
       <div class='colorusage_right'> \
-        <p>Power Usage: {{ colorInfo[2][0] }}mW/s</p> \
+        <p>Power Usage: {{ colorInfo[2][0] }}mW</p> \
         <p>Power Usage Ratio: {{ colorInfo[3] }}%</p> \
       </div> \
     </div> \
