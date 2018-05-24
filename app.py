@@ -179,8 +179,9 @@ def upload_file():
 	'''
 	Recommended Image
 	'''
-
-	if translate == "rgborder":
+	if translate == "none":
+		trImage = im
+	elif translate == "rgborder":
 		trImage = tr.RGBOrder(im, end)
 	elif translate == "greyscale":
 		trImage = tr.GreyScale(im)
