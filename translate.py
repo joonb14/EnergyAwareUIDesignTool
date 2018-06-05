@@ -63,21 +63,21 @@ def RGBOrder(im, end):
 		elif int(row['G']) > (int(row['B']) + Diff) and int(row['G']) > (int(row['R']) + Diff):
 			Green_num+=1
 
-
+			#(g, r, b)
 	r, g, b = im.split()
 	        
 	if Red_num >= Blue_num and Blue_num >= Green_num:
-	    out = Image.merge("RGB", (r, b, g))
-	elif Red_num >= Green_num and Green_num >= Blue_num:
-	    out = Image.merge("RGB", (r, g, b))
-	elif Green_num >= Blue_num and Blue_num >= Red_num:
-	    out = Image.merge("RGB", (g, b, r))
-	elif Green_num >= Red_num and Red_num >= Blue_num:
-	    out = Image.merge("RGB", (g, r, b))
-	elif Blue_num >= Red_num and Red_num >= Green_num:
 	    out = Image.merge("RGB", (b, r, g))
-	elif Blue_num >= Green_num and Green_num >= Red_num:
+	elif Red_num >= Green_num and Green_num >= Blue_num:
+	    out = Image.merge("RGB", (g, r, b))
+	elif Green_num >= Blue_num and Blue_num >= Red_num:
 	    out = Image.merge("RGB", (b, g, r))
+	elif Green_num >= Red_num and Red_num >= Blue_num:
+	    out = Image.merge("RGB", (r, g, b))
+	elif Blue_num >= Red_num and Red_num >= Green_num:
+	    out = Image.merge("RGB", (r, b, g))
+	elif Blue_num >= Green_num and Green_num >= Red_num:
+	    out = Image.merge("RGB", (g, b, r))
 
 	return out
 
@@ -114,17 +114,17 @@ def Inverted(im, end):
 	r, g, b = inverted_im.split()
 	        
 	if Red_num >= Blue_num and Blue_num >= Green_num:
-	    out = Image.merge("RGB", (r, b, g))
-	elif Red_num >= Green_num and Green_num >= Blue_num:
-	    out = Image.merge("RGB", (r, g, b))
-	elif Green_num >= Blue_num and Blue_num >= Red_num:
-	    out = Image.merge("RGB", (g, b, r))
-	elif Green_num >= Red_num and Red_num >= Blue_num:
-	    out = Image.merge("RGB", (g, r, b))
-	elif Blue_num >= Red_num and Red_num >= Green_num:
 	    out = Image.merge("RGB", (b, r, g))
-	elif Blue_num >= Green_num and Green_num >= Red_num:
+	elif Red_num >= Green_num and Green_num >= Blue_num:
+	    out = Image.merge("RGB", (g, r, b))
+	elif Green_num >= Blue_num and Blue_num >= Red_num:
 	    out = Image.merge("RGB", (b, g, r))
+	elif Green_num >= Red_num and Red_num >= Blue_num:
+	    out = Image.merge("RGB", (r, g, b))
+	elif Blue_num >= Red_num and Red_num >= Green_num:
+	    out = Image.merge("RGB", (r, b, g))
+	elif Blue_num >= Green_num and Green_num >= Red_num:
+	    out = Image.merge("RGB", (g, b, r))
 
 	return out
 
