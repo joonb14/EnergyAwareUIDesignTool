@@ -20,5 +20,4 @@ not flask run!
 <br>
 <br>
 
-Test it in <br>
-<p style="disabled"> http://css2.yonsei.ac.kr:13000</p><br>
+<p disabled="true">Test it in: http://css2.yonsei.ac.kr:13000</p><br>
