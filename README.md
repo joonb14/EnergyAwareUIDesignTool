@@ -1,7 +1,7 @@
 # Energy Aware UI Design Tool
 
 Director & Leader: cyh0967@gmail.com <br/>
-tool development:<br/>
+Tool development:<br/>
   Joonbeom Park: joonb14@gmail.com 
   Jaeyoon Kang: mint3759@naver.com 
   Hakjun Lee: jjuni0525@naver.com 
