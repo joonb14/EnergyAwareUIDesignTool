@@ -16,7 +16,9 @@ Python3_Image_Clustering: https://github.com/joonb14/Python3_Image_Clustering.gi
 PowerUsageofPixelXL_SVM_modeling: https://github.com/joonb14/PowerUsageofPixelXL_SVM_modeling.git
 
 <hr/>
+
 ## To run some of the special Features
+
 to use option GreyScale Recovery, first download<br/>
 colorize.lua<br/>
 colornet.t7<br/>
