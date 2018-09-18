@@ -24,7 +24,8 @@ not flask run!<br>
 
 <hr/>
 
-# IDEA: \nCurrent UIs are not Practical in Power Consumption Issue
+# IDEA:
+### Current UIs are not Practical in Power Consumption Issue
 
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682521-71d5ab00-bb7b-11e8-9b2d-b4750a8ea0c3.JPG">
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682528-74380500-bb7b-11e8-89fd-cc60962ac828.JPG">
