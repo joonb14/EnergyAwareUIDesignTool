@@ -23,6 +23,7 @@ to use option GreyScale Recovery, first download<br/>
 colorize.lua<br/>
 colornet.t7<br/>
 from: https://github.com/satoshiiizuka/siggraph2016_colorization<br/>
+<img width="800" src="https://user-images.githubusercontent.com/30307587/45686673-eb739600-bb87-11e8-9369-3520c51b4149.PNG">
 then store these two files into model directory<br/>
 <br/>
 
