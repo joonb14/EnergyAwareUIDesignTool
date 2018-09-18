@@ -20,7 +20,5 @@ not flask run!
 <br>
 <br>
 
-Test it in 
-<br>
-http://css2.yonsei.ac.kr:13000
-<br>
+Test it in <br>
+<disabled>http://css2.yonsei.ac.kr:13000<br>
