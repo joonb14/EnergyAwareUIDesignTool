@@ -64,8 +64,24 @@ not flask run!<br>
 
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682626-c711bc80-bb7b-11e8-99b1-635eaea5d0c0.JPG">
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45687009-7f456200-bb88-11e8-8bc2-591988086b34.JPG">
-<img width="800" src="">
+
+## Tried Methods to change UI colors
+##### RGB Order reconstruction
+<img width="800" src="https://user-images.githubusercontent.com/30307587/45687214-1c07ff80-bb89-11e8-951c-22acde1b8429.JPG">
+
+##### Achromatic Invert
+<img width="800" src="https://user-images.githubusercontent.com/30307587/45687215-1c07ff80-bb89-11e8-8225-61710098abf0.JPG">
+
+##### GreyScale Recovery
+from: https://github.com/satoshiiizuka/siggraph2016_colorization<br/>
+<img width="800" src="https://user-images.githubusercontent.com/30307587/45686673-eb739600-bb87-11e8-9369-3520c51b4149.PNG">
 
 # UI Tool Screenshot
 
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45687106-d0555600-bb88-11e8-995c-4f6a57078e85.PNG">
+
+# Result
+Probably not much of difference in power usage unless you give up the pretty UI<br/>
+Such as using Achromatic Invert or Invert<br/>
+Which is not a good idea for UI Designers<br/>
+So Working on Ver.2 of UI Design Tool<br/>
