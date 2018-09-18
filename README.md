@@ -7,6 +7,15 @@ OLED display's power usage is related to color of UI<br/>
 To be simple, white based UIs are bad and black based UIs are good for Power saving<br/>
 
 <hr/>
+This work includes tutorials in my repository. <br/>
+Somethings are for experiments before making UI tool <br/>
+And somethings are included in the UI tool <br/>
+followings are the projects that is used in UI tool<br/>
+Python3_Monsoon_ADB: https://github.com/joonb14/Python3_Monsoon_ADB.git <br/>
+Python3_Image_Clustering: https://github.com/joonb14/Python3_Image_Clustering.git <br/>
+PowerUsageofPixelXL_SVM_modeling: https://github.com/joonb14/PowerUsageofPixelXL_SVM_modeling.git
+
+<hr/>
 
 to use option GreyScale Recovery, first download<br/>
 colorize.lua<br/>
