@@ -1,5 +1,11 @@
 # Energy Aware UI Design Tool
 
+Director & Leader: cyh0967@gmail.com <br/>
+tool development:<br/>
+  Joonbeom Park: joonb14@gmail.com
+  Jaeyoon Kang: mint3759@naver.com
+  Hakjun Lee: jjuni0525@naver.com
+
 This tool is designed for UI designers and App developers. <br/>
 Who are not considering about Power Usage of Mobile device. <br/>
 Today most Mobile devices uses OLED display. <br/>
