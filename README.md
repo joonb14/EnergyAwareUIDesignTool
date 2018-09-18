@@ -30,10 +30,14 @@ not flask run!<br>
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682528-74380500-bb7b-11e8-89fd-cc60962ac828.JPG">
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682548-844fe480-bb7b-11e8-938c-0e86319a3186.JPG">
 
+<hr/>
+
 ### To achieve SVM model for Power estimation
 
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682644-d8f35f80-bb7b-11e8-80fb-3a296779e6b8.JPG">
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682382-1b686c80-bb7b-11e8-9551-42cfbff5ad81.JPG">
+
+<hr/>
 
 ### UI Design Tool on flask
 
