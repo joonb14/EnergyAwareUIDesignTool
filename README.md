@@ -20,4 +20,4 @@ not flask run!
 <br>
 <br>
 
-<p disabled="true">Test it in: http://css2.yonsei.ac.kr:13000</p><br>
+<del>Test it in: http://css2.yonsei.ac.kr:13000<br>
