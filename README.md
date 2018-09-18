@@ -26,16 +26,19 @@ not flask run!<br>
 
 # IDEA:
 <br>
+
 ### Current UIs are not Practical in Power Consumption Issue
 
 <br/>
+
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682521-71d5ab00-bb7b-11e8-9b2d-b4750a8ea0c3.JPG">
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682528-74380500-bb7b-11e8-89fd-cc60962ac828.JPG">
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682548-844fe480-bb7b-11e8-938c-0e86319a3186.JPG">
 
 <hr/>
 
-<br>
+<br/>
+
 # To achieve SVM model for Power estimation
 
 <br/>
@@ -45,9 +48,11 @@ not flask run!<br>
 <hr/>
 
 <br/>
+
 # UI Design Tool on flask
 
 <br/>
+
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682626-c711bc80-bb7b-11e8-99b1-635eaea5d0c0.JPG">
 <img width="800" src="">
 <img width="800" src="">
