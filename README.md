@@ -24,10 +24,7 @@ not flask run!<br>
 
 <hr/>
 
-# IDEA:
-<br>
-
-### Current UIs are not Practical in Power Consumption Issue
+## IDEA: Current UIs are not Practical in Power Consumption Issue
 
 <br/>
 
@@ -39,7 +36,7 @@ not flask run!<br>
 
 <br/>
 
-# To achieve SVM model for Power estimation
+## To achieve SVM model for Power estimation
 
 <br/>
 <img width="800" src="https://user-images.githubusercontent.com/30307587/45682644-d8f35f80-bb7b-11e8-80fb-3a296779e6b8.JPG">
@@ -49,7 +46,7 @@ not flask run!<br>
 
 <br/>
 
-# UI Design Tool on flask
+## UI Design Tool on flask
 
 <br/>
 
